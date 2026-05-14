@@ -127,6 +127,10 @@ def setup(python_exe: str, ext_dir: Path, gpu_sm: int, cuda_version: int = 0, to
         print("[setup] -> PyTorch + ROCm 7.2")
         print("[setup] Installing PyTorch …")
         pip(venv, "install", *torch_pkgs, "--index-url", torch_index)
+    elif platform.system() == "Darwin":
+        torch_pkgs = ["torch", "torchvision"]
+        print("[setup] macOS detected -> installing CPU/MPS PyTorch")
+        pip(venv, "install", *torch_pkgs)
     elif is_linux_arm64 and (gpu_sm >= 100 or cuda_version >= 128):
         print(f"[setup] GPU SM {gpu_sm}, CUDA {cuda_version}, Linux ARM64 -> PyTorch 2.7 + CUDA 12.8")
         install_arm64_pytorch(venv, ARM64_CU128_WHEELS, "cu128", "https://download.pytorch.org/whl/cu128")
@@ -176,6 +180,9 @@ def setup(python_exe: str, ext_dir: Path, gpu_sm: int, cuda_version: int = 0, to
     # ------------------------------------------------------------------ #
     print("[setup] Installing rembg …")
     if is_linux_arm64 or torch_flavor == "rocm":
+        pip(venv, "install", "rembg")
+        pip(venv, "install", "onnxruntime")
+    elif platform.system() == "Darwin":        # ← ADD THIS
         pip(venv, "install", "rembg")
         pip(venv, "install", "onnxruntime")
     elif gpu_sm >= 70:
