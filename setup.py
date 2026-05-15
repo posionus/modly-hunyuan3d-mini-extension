@@ -128,6 +128,8 @@ def setup(python_exe: str, ext_dir: Path, gpu_sm: int, cuda_version: int = 0, to
         print("[setup] Installing PyTorch …")
         pip(venv, "install", *torch_pkgs, "--index-url", torch_index)
     elif platform.system() == "Darwin":
+        pip(venv, "install", "rembg", "--prefer-binary")
+        pip(venv, "install", "onnxruntime", "--prefer-binary")
         torch_pkgs = ["torch", "torchvision"]
         print("[setup] macOS detected -> installing CPU/MPS PyTorch")
         pip(venv, "install", *torch_pkgs)
@@ -173,6 +175,7 @@ def setup(python_exe: str, ext_dir: Path, gpu_sm: int, cuda_version: int = 0, to
         "einops",
         "scipy",
         "scikit-image",
+        "--prefer-binary",
     )
 
     # ------------------------------------------------------------------ #
