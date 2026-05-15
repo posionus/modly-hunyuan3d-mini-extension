@@ -163,6 +163,7 @@ def setup(python_exe: str, ext_dir: Path, gpu_sm: int, cuda_version: int = 0, to
     # ------------------------------------------------------------------ #
     print("[setup] Installing core dependencies …")
     pip(venv, "install",
+        "numpy<2",
         "Pillow",
         "numpy",
         "trimesh",
